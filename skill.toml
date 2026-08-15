@@ -1,0 +1,12 @@
+slug = "ruby"
+name = "schematize-ruby"
+tag = "Backend · Ruby"
+status = "beta"
+order = 11
+current_version = "0.1.0"
+href = "/ruby"
+
+[descriptions]
+pt = "Padrões normativos de engenharia para backends, serviços e scripts em Ruby (Rails/Sinatra)."
+en = "Normative engineering standards for Ruby backends, services and scripts (Rails/Sinatra)."
+es = "Estándares normativos de ingeniería para backends, servicios y scripts en Ruby (Rails/Sinatra)."
