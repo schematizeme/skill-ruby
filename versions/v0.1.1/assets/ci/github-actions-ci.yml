@@ -1,0 +1,62 @@
+# schematize-ruby — workflow de CI de referência (§13, §21, §22, §35).
+# Copie para .github/workflows/ci.yml e ajuste <projeto>/comandos da sua stack.
+name: ci
+on:
+  pull_request:
+  push: { branches: [main] }
+
+jobs:
+  standards-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Gate de padrões (DoD/§37) no diff
+        run: bash .claude/skills/schematize-ruby/scripts/check-diff.sh "origin/${{ github.base_ref || 'main' }}"
+      - name: Índice de microfunções atualizado (§39)
+        run: |
+          node .claude/skills/schematize-ruby/scripts/build-index.mjs ./app > /tmp/idx.md || true
+          # compara com o commitado; descomente quando o índice estiver versionado:
+          # diff -q /tmp/idx.md <projeto>_archive/index/INDEX_FUNCTIONS.md
+      - name: Scan de segredo no archive (§16.1/§32)
+        run: bash .claude/skills/schematize-ruby/scripts/archive-secret-scan.sh .
+
+  lint-and-static:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }   # lê .ruby-version; instala gems do Gemfile.lock
+      - name: RuboCop (estilo + Metrics/§6)
+        run: bundle exec rubocop --parallel
+      - name: Brakeman (SAST — §37)
+        run: bundle exec brakeman --no-pager --exit-on-warn
+      - name: bundler-audit (CVE de gem — cadeia de suprimentos)
+        run: |
+          bundle exec bundler-audit update
+          bundle exec bundler-audit check
+
+  test-kit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+      - name: RSpec + cobertura (SimpleCov — §22)
+        run: bundle exec rspec
+      - name: Smoke + security + authz + hardening (PR — §22.6)
+        run: |
+          # <projeto> test smoke && <projeto> test security && <projeto> test authz && <projeto> test hardening
+          echo "ligue ao CLI <projeto>_ops aqui"
+      - name: Smoke self-check (anti verde-mentiroso — §22.3)
+        run: bash .claude/skills/schematize-ruby/scripts/smoke-selfcheck.sh --self-check
+
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Trivy fs
+        uses: aquasecurity/trivy-action@master
+        with: { scan-type: fs, severity: HIGH,CRITICAL, exit-code: '1' }
+      - name: Gitleaks
+        uses: gitleaks/gitleaks-action@v2
