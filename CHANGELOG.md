@@ -3,6 +3,11 @@
 Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
+## [0.3.1] — 2026-08-21
+
+### Corrigido
+- **`padroes-codigo.md`: o exemplo de endless method não compilava.** `def call(params) = ...` é **SyntaxError** (✔ verificado no Ruby 3.4, em container: *unexpected end-of-input; expected an expression after the operator*) — o `...` em Ruby é **argument forwarding**, não reticência de exemplo. Corrigido para um corpo real, com a nota que explica a diferença: *exemplo que não compila é copiado assim mesmo, e o leitor perde tempo achando que errou o resto*.
+
 ## [0.3.0] — 2026-08-21
 Saneamento do catálogo conforme a vistoria de 2026-08-21.
 
