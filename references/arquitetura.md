@@ -140,10 +140,10 @@ Projetos Rails legados onde o `app/` já cresceu sem separação de camadas **po
 - Toda nova feature/refactor em código tocado segue o layout completo (`app/domain/`, `app/application/`, `app/infrastructure/`, `app/interface/`) — não introduzir mais lógica de negócio dentro de fat model ou fat controller.
 - Ao mover/quebrar arquivo legado, organize já em folders/packs DDD mesmo que internamente alguma classe ainda misture responsabilidades (ex.: service em `application/` ainda chamando `Model.where` direto). Estrutura primeiro, inversão depois.
 - Cada PR que toca arquivo híbrido **deve** mover ao menos um pedaço pra direção certa (ex.: extrair regra de um fat model pra `domain/`, mover query pra um repository em `infrastructure/`).
-- ADR registrando o débito e o plano de remoção: `<project>/docs/adr/<n>-ddd-migration-<contexto>.md`.
+- ADR registrando o débito e o plano de remoção: `<projeto>/<projeto>_archive/decisoes/<n>-ddd-migration-<contexto>.md`.
 
 **SHOULD**
-- Manter teste de cobertura por camada (§22) durante a transição — domain começa com 0%, sobe a cada PR.
+- Manter teste de cobertura por camada (ver a `schematize-qa`) durante a transição — domain começa com 0%, sobe a cada PR.
 - Guard test ou `packwerk` que **rejeita dependências proibidas** logo que possível (mesmo com whitelist de exceções legadas):
   - `domain/` não referencia `ApplicationRecord`/`ActiveRecord`, `Sidekiq`, `ActionController`, `application/*`, `interface/*`.
   - `application/` não referencia `interface/*`.

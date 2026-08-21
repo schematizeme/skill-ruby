@@ -12,7 +12,7 @@ Carregue **à força** e passe a aplicar **integralmente** os Padrões de Engenh
    - `dados-eventos.md` — ActiveRecord/Sequel, migrations reversíveis, Sidekiq/ActiveJob, outbox, cache Redis, APIs, resiliência.
    - `concorrencia.md` — **a GVL**, threads (I/O-bound), Puma/forking e Ractor (CPU-bound), async/fibers, Sidekiq; CPU-bound exige processos/Ractors, não threads.
    - `cadeia-suprimentos.md` — Gemfile.lock, bundler-audit, SBOM, imagem mínima/pinada, `.ruby-version` não-EOL.
-   - `testes.md` + `testes-execucao.md` — RSpec/Minitest, FactoryBot, SimpleCov, VCR/WebMock, "verde de verdade", pentest, Q.A. plan-first. **Testes são load-bearing pela dinâmica do Ruby.**
+   - `testes.md` — RSpec/Minitest, FactoryBot, SimpleCov, VCR/WebMock, "verde de verdade", pentest, Q.A. plan-first. **Testes são load-bearing pela dinâmica do Ruby.**
    - `observabilidade.md` — OTel Ruby, lograge/semantic_logger, healthchecks, performance, FinOps.
    - `operacao.md` + `entrega.md` — config, deploy, git/PR, runbooks, ADR, **archive**, DoD, índice.
    - `ops.md` — **control plane `<projeto>_ops`**: fluxo dev→local→github→hml→prd, ops como interface única, instalação paralela=`nproc`, independência=invariante.

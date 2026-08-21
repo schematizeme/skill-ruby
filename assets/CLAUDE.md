@@ -140,10 +140,10 @@ Lista completa com veto + caminho certo: ver `references/anti-padroes.md` (§37)
 ## Definition of Done
 
 Nada é "pronto" sem: `bundle exec rspec` verde + cobertura mínima (SimpleCov), simulated
-com cobertura total, pentest de entrada limpo (`brakeman`/`bundler-audit`), nenhum
-anti-padrão da §37, observabilidade, OpenAPI atualizada (se API), migration com rollback
+com cobertura total, pentest de entrada limpo (`brakeman`/`bundler-audit`),
+**nenhum efeito externo real fora de `prd`** (piso do e-mail/SMS/push: sink por default, guard deny-by-default no provider, cap por execução, domínio de teste em rota nula — gate em `scripts/check-external-effects.sh`), nenhum anti-padrão da §37, observabilidade, OpenAPI atualizada (se API), migration com rollback
 (se schema), **archive commitado**, RuboCop verde, CI verde e review aprovado. Detalhe na
-skill, `references/entrega.md`/`operacao.md` (§35).
+skill, `references/entrega.md` (§35).
 
 ## Qualidade de código e índice (sempre)
 

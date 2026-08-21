@@ -1,5 +1,16 @@
 # Filosofia, Aplicação Universal e Anti-Padrões Vetados
 
+> **CITE ESTES ITENS PELO TÍTULO, NUNCA PELO NÚMERO.** A numeração é **local desta skill** e
+> **diverge entre as irmãs**: o mesmo `§37 item 45` é *"authz hand-rolled"* aqui, *"bloquear o
+> scheduler da BEAM"* na `schematize-elixir` e *"dois serviços no mesmo user Linux"* na
+> `schematize-ruby`; o item 49 é *"efeito externo real fora de prd"* na base, não existe em três
+> skills e é *"ReleaseFast sem profiling"* na `schematize-zig`. Os máximos vão de 46 a 53. Um
+> ponteiro `§37 item N` cruzando skills aponta para outra coisa — e um dentro da própria skill
+> apodrece assim que alguém insere um item no meio (foi o que aconteceu com a citação a *"item 48"*
+> em `references/iam.md`, quando esta lista terminava no 46). **Forma correta:** §37, *"<título do
+> item>"*.
+
+
 > Parte da skill **schematize-ruby**. As referências cruzadas (§N) apontam para seções do corpo completo — todas presentes no conjunto de references desta skill.
 
 ## Índice
@@ -112,10 +123,10 @@ Prioridades, em ordem de desempate:
     → **Strong params** com `permit(...)` allowlist explícita por endpoint; nunca `permit!`.
 
 14. **`Access-Control-Allow-Origin: *` em rota autenticada** (pior com `credentials: true`) no `rack-cors`.
-    → Allowlist explícita de origens no `config/initializers/cors.rb` (§22.3 hardening).
+    → Allowlist explícita de origens no `config/initializers/cors.rb` (a `schematize-qa` (smoke e matriz simulated, `references/categorias.md` secoes 5 e 10) hardening).
 
 15. **Endpoint de debug/admin (Sidekiq Web UI, `/rails/info`, console web) sem auth, ou bind em `0.0.0.0`** expondo porta interna.
-    → Bind restrito, auth obrigatória, montar Sidekiq/admin atrás de `authenticate` no routes; `web-console` só em dev (§22.3).
+    → Bind restrito, auth obrigatória, montar Sidekiq/admin atrás de `authenticate` no routes; `web-console` só em dev (ver a `schematize-qa` (smoke e matriz simulated, `references/categorias.md` secoes 5 e 10)).
 
 ### Erros, tipos e qualidade
 
@@ -134,7 +145,7 @@ Prioridades, em ordem de desempate:
     → Conserta o código, não silencia o teste. A dinamicidade do Ruby **exige** o teste (RSpec/Minitest + FactoryBot); ele é a rede que o compilador não te dá.
 
 20. **Baixar o threshold do SimpleCov ou editar o gate** pra o número fechar.
-    → Cobertura é contrato (§22). Sobe escrevendo teste, não mexendo na régua.
+    → Cobertura é contrato (ver a `schematize-qa`). Sobe escrevendo teste, não mexendo na régua.
 
 21. **Mockar o próprio sistema sob teste** retornando sucesso fixo, ou `allow(...).to receive` no objeto testado, dando "verde" falso.
     → Testar comportamento real; mock/stub só nas bordas externas (gateway, HTTP, relógio).
@@ -228,6 +239,13 @@ Prioridades, em ordem de desempate:
 
 49. **Logout que só apaga o cookie** (sessão recuperável por refresh/replay), ou sessão curta que chuta o usuário toda hora sem refresh silencioso.
     → **Logout irreversível** (revoga refresh+família, apaga sessão server-side, `jti` na denylist consultada em toda request); **sessão 7d/90d** com refresh rotativo silencioso e multi-dispositivo (`references/iam.md` §6).
+
+
+### Efeitos externos (e-mail, SMS, push, webhook, cobrança)
+
+50. **Mandar de verdade fora de produção** — `ActionMailer`/SDK do provedor com `delivery_method :smtp` em dev/hml, `@gmail.com` (ou o seu e-mail) em fixture/factory/persona, laço de teste criando N contas com **Email OTP always-on** e nenhum contador no caminho.
+    → **`delivery_method` por ambiente** (`:test`/sink fora de `prd`), **guard no interceptor/`delivering_email`** (levanta `ExternalRecipientBlocked`, fail-closed quando a config falta) que **checa o domínio de verdade** (rejeita endereço sem `@` antes do split), **cap por execução** com `Mutex` (`MAIL_MAX_PER_RUN`) avaliado ANTES de qualquer early-return de ambiente, e endereço sintético só em `test.<domain>` com **null MX** (`references/iam.md` §3.1; normativa em `schematize-engineering` → `references/efeitos-externos.md`). Bounce/complaint em massa **queima IP e domínio** e derruba o e-mail transacional de **produção** — inclusive o **OTP de login** —, com semanas de warm-up e utilidade zero. Não tem undo.
+    *(Cite este anti-padrão **pelo título**, nunca por número: o mesmo `§37 item N` significa coisas diferentes em cada skill — ver a nota de numeração no topo.)*
 
 > Regra de bolso: se a justificativa começa com "só pra funcionar", "depois eu arrumo", ou "é mais rápido assim" e o resultado mexe em segredo, auth, dado, registro, **ou toca o servidor por fora do fluxo/ops** — **provavelmente é uma macaquice desta lista. Para e faz certo.**
 

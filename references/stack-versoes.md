@@ -1,6 +1,7 @@
 # Anexo A — números voláteis (versões e limiares)
 
-> Parte da skill **schematize-ruby**. **Fonte volátil** — versões e limiares mudam. Atualize aqui (revisão trimestral) sem mexer no corpo normativo. Última verificação: **junho/2026**. Sempre confirme o número atual antes de aplicar como gate.
+> Parte da skill **schematize-ruby**. **Fonte volátil** — versões e limiares mudam. Atualize aqui (revisão trimestral) sem mexer no corpo normativo. **Verificado em: 2026-08-21**. Sempre confirme o número atual antes de aplicar como gate.
+> Conferido nas releases oficiais nesta data: a série corrente do Ruby é a **4.0** (último patch **4.0.6**, 14/07/2026). O piso normativo continua sendo *"série suportada, não-EOL"* — o número acima é calibração, não trava.
 
 ## Ruby runtime
 

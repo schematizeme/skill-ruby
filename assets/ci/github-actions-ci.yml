@@ -1,4 +1,4 @@
-# schematize-ruby — workflow de CI de referência (§13, §21, §22, §35).
+# schematize-ruby — workflow de CI de referência (§13, §21, a `schematize-qa`, §35).
 # Copie para .github/workflows/ci.yml e ajuste <projeto>/comandos da sua stack.
 name: ci
 on:
@@ -14,10 +14,12 @@ jobs:
       - name: Gate de padrões (DoD/§37) no diff
         run: bash .claude/skills/schematize-ruby/scripts/check-diff.sh "origin/${{ github.base_ref || 'main' }}"
       - name: Índice de microfunções atualizado (§39)
-        run: |
-          node .claude/skills/schematize-ruby/scripts/build-index.mjs ./app > /tmp/idx.md || true
-          # compara com o commitado; descomente quando o índice estiver versionado:
-          # diff -q /tmp/idx.md <projeto>_archive/index/INDEX_FUNCTIONS.md
+        env:
+          # Sem estes dois o gate NAO roda — e nao rodar REPROVA. Gate desarmado em silencio
+          # ("|| true" + diff comentado) foi o achado A5 da vistoria de 2026-08-21.
+          INDEX_SRC: ${{ vars.INDEX_SRC || './app' }}
+          INDEX_FILE: ${{ vars.INDEX_FILE }}
+        run: bash .claude/skills/schematize-ruby/scripts/check-index.sh
       - name: Scan de segredo no archive (§16.1/§32)
         run: bash .claude/skills/schematize-ruby/scripts/archive-secret-scan.sh .
 
@@ -42,13 +44,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ruby/setup-ruby@v1
         with: { bundler-cache: true }
-      - name: RSpec + cobertura (SimpleCov — §22)
+      - name: RSpec + cobertura (SimpleCov — a `schematize-qa`)
         run: bundle exec rspec
-      - name: Smoke + security + authz + hardening (PR — §22.6)
+      - name: Smoke + security + authz + hardening (PR — a `schematize-qa` (gates de CI, `references/execucao.md` secao 6))
         run: |
           # <projeto> test smoke && <projeto> test security && <projeto> test authz && <projeto> test hardening
           echo "ligue ao CLI <projeto>_ops aqui"
-      - name: Smoke self-check (anti verde-mentiroso — §22.3)
+      - name: Smoke self-check (anti verde-mentiroso — a `schematize-qa` (smoke e matriz simulated, `references/categorias.md` secoes 5 e 10))
         run: bash .claude/skills/schematize-ruby/scripts/smoke-selfcheck.sh --self-check
 
   security-scan:
