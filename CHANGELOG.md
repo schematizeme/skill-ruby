@@ -1,5 +1,22 @@
 # Changelog — schematize-ruby
 
+Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/),
+com versionamento [SemVer](https://semver.org/lang/pt-BR/).
+
+## [0.3.0] — 2026-08-21
+Saneamento do catálogo conforme a vistoria de 2026-08-21.
+
+### Mudado
+- **Solid Queue é o default** de jobs (`concorrencia.md` §C6), com o motivo que é de arquitetura e não de gosto: com Sidekiq a fila vive num **Redis fora da transação** do dado, e é dali que nasce o job que roda **antes do commit** e processa um registro que não existe; com Solid Queue o enfileiramento é uma linha no mesmo Postgres — **o outbox de graça**. Sidekiq continua legítimo, com ADR, quando o volume/latência pede.
+- Entrou o MUST que faltava e é o bug de fila mais comum do Rails: **enfileirar depois do commit**.
+
+### Corrigido
+- **`authenticate_by` (Rails 7.1+) prescrito** em `seguranca.md` e `iam.md`, com o mecanismo: escrito ao pé da letra, `find_by(email:)&.authenticate(...)` **não executa o hash quando o e-mail não existe** e responde muito mais rápido — **enumeração de usuário por timing**, medível de fora. O par obrigatório é a resposta genérica idêntica nos dois casos.
+- Hash de senha alinhado ao piso da casa: **argon2id para senha nova**, bcrypt cost ≥ 12 **só como legado a migrar** (era "bcrypt **ou** argon2id" — a deriva da Classe C).
+
+### Mudado (cont.)
+- `anti-padroes.md`, `arquitetura.md`, `entrega.md`, `dados-eventos.md`, `observabilidade.md`, `seguranca.md`, `cadeia-suprimentos.md` e `ops.md` viraram **ponteiro** (poda mecânica).
+
 ## [0.2.0] — 2026-08-20
 Piso novo: **efeito externo NUNCA sai de não-produção** — recorte Ruby/Rails (ActionMailer + interceptor) da normativa `schematize-engineering` → `references/efeitos-externos.md`.
 ### Adicionado
@@ -9,14 +26,10 @@ Piso novo: **efeito externo NUNCA sai de não-produção** — recorte Ruby/Rail
 - **references/testes.md §22**: item obrigatório — teste nunca dispara efeito externo real (`:test`, endereço `@test.<domain>` inclusive na `sequence` do FactoryBot e no `db/seeds.rb`, spec vermelho do guard e do cap, `WebMock.disable_net_connect!`, grep de CI contra `@gmail.com`/terceiros).
 - **assets/CLAUDE.md**: piso 17 com o recorte Rails (delivery_method por ambiente, interceptor, cap, fail-closed, rota nula) e o motivo (queima de IP e domínio derruba o OTP de produção).
 
-
 ## [0.1.2] — 2026-08-18
 Correção da contradição do muro pré-login de IAM (alinha ao `iam.md` da schematize-engineering).
 ### Mudado
 - **/ruby-iam**: removido o "2º fator forte obrigatório antes do acesso pleno" e o "força 2º fator no 1º login" — o muro pré-login / deadlock de bootstrap VETADO pela norma. Agora senha+Email OTP = 2FA baseline; fator forte é nudge + step-up just-in-time.
-
-
-Formato: [Keep a Changelog]; versionamento: SemVer.
 
 ## [0.1.1] — 2026-08-18
 Q.A. repointado para a skill dedicada **schematize-qa**.
