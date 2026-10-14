@@ -1,7 +1,7 @@
 ---
 name: schematize-ruby
 metadata:
-  version: 0.5.1
+  version: 0.6.0
 description: >-
   Engenharia Ruby: Rails 8, Solid Queue, RSpec. Use ao tocar Gemfile/*.rb/config.ru (API, job, migration, CI/CD) ou ao escolher Ruby no rol por fit + ADR.
 ---
@@ -10,7 +10,7 @@ description: >-
 
 Conjunto normativo que rege como software Ruby é projetado, construído, testado e operado aqui. Especializa a base agnóstica (`schematize-engineering`) para o idioma, o build (Bundler/gems), os frameworks (Rails/Sinatra/Roda/Sidekiq/Puma), o modelo de concorrência (GVL/threads/Ractor/async) e o ecossistema Ruby — **sem nunca afrouxar o piso**. Escolher Ruby é decisão de ADR (fit); cumprir o piso não é opcional.
 
-**Versão:** skill `schematize-ruby` v0.5.1. Changelog em `CHANGELOG.md`.
+**Versão:** skill `schematize-ruby` v0.6.0. Changelog em `CHANGELOG.md`.
 
 ## Precedência e herança (leia antes de divergir)
 
