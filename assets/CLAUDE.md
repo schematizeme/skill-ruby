@@ -28,8 +28,8 @@ decisão — não trabalhe de memória.
    **VETADO** `permit!`/`to_unsafe_h` sobre input de usuário.
 4. **Auth e autorização server-side.** `tenant_id`/role/`user_id` vêm do token
    verificado, nunca do `params`/body. JWT validado por inteiro (assinatura, exp, aud,
-   iss, `alg` em allowlist; **`alg=none` vetado**). Senha em `bcrypt` cost ≥ 12 ou
-   `argon2` (argon2id). Token/sessão/reset por **`SecureRandom`**, nunca `rand`.
+   iss, `alg` em allowlist; **`alg=none` vetado**). Senha em argon2id-only (bcrypt/PBKDF2 só
+   legado a migrar; `schematize-engineering → references/iam.md` §2.1). Token/sessão/reset por **`SecureRandom`**, nunca `rand`.
 5. **Desserialização segura.** **VETADO** `YAML.load`/`Marshal.load`/`Oj` unsafe sobre
    dado não-confiável → `YAML.safe_load` com allowlist. Sem `eval`/`send`/`constantize`
    dirigido por input.

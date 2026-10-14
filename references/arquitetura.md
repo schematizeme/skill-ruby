@@ -48,7 +48,7 @@
 
 - **Ruby é SANCIONADA** — serviço novo em Ruby é **permitido por fit + ADR** (não é legado-only como Node backend). O ADR nomeia o fit que justifica a escolha.
 
-- Escolher por **encaixe com o problema**, não por preferência. O default pragmático da casa é Go; Ruby entra quando o **fit** manda (ver §3.1).
+- Escolher por **encaixe com o problema**, não por preferência. Sem linguagem hierárquica no rol (desempate: `schematize-engineering → references/linguagens.md`); Ruby entra quando o **fit** manda (ver §3.1).
 
 - Frameworks são bem-vindos; abstrações mágicas não. Critério: consigo entender o stack trace e sei quem chamou o quê? Metaprogramação que esconde comportamento é veto (`references/anti-padroes.md`).
 
@@ -78,9 +78,9 @@
 
 - **Sinatra / Roda** — API leve / serviço fino / microserviço, sem o peso do Rails. Menos mágica, fronteira mais explícita, ideal quando não se precisa do full-stack.
 
-- Servidor é **Puma**; jobs assíncronos em **Sidekiq** (ou ActiveJob sobre Sidekiq). Detalhe de concorrência em `references/concorrencia.md`.
+- Servidor é **Puma**; jobs assíncronos em **Solid Queue** via ActiveJob (default); **Sidekiq** por ADR quando volume/ecossistema justificar. Detalhe de concorrência em `references/concorrencia.md`.
 
-> Regra de fit: um script/protótipo ou um Rails de produto pede Ruby; um hot path de throughput pede Go/Rust/Zig; auth/cripto pede Rust. Se dois encaixam, escolha o **default pragmático** (Go) e registre o porquê no ADR — ou registre por que Ruby vence aqui.
+> Regra de fit: um script/protótipo ou um Rails de produto pede Ruby; um hot path de throughput pede Go/Rust/Zig; auth/cripto pede Rust. Se dois encaixam, siga o desempate de `schematize-engineering → references/linguagens.md` e registre o porquê no ADR — ou registre por que Ruby vence aqui.
 
 ## 4. Arquitetura
 

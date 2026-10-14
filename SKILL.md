@@ -2,7 +2,8 @@
 name: schematize-ruby
 metadata:
   version: 0.4.2
-description: Padrões normativos de engenharia da casa no recorte Ruby (Rails 8, Sidekiq, RSpec) — arquitetura/DDD, segurança, IAM, testes/pentest, dados, observabilidade, deploy, archive. Use SEMPRE que for projetar, gerar, revisar ou refatorar backend, API, serviço, job, schema, migration, infra, CI/CD, teste ou deploy em Ruby/Rails — mesmo sem citar "padrão" —, e ao escolher stack (Ruby entra por fit + ADR no rol Go/Rust/Elixir/C#/Zig/Ruby), modelar eventos/banco, desenhar auth, configurar observabilidade ou produzir ADR/runbook/archive. Pisos: segredo nunca no cliente; nada de SQL por interpolação (AR/Sequel parametrizado); auth server-side com JWT validado por inteiro; IAM como app separada; efeito externo (e-mail/SMS/push) NUNCA sai de não-produção — sink por default, guard deny-by-default, cap por execução, domínio de teste em rota nula; archive obrigatório. Frontend delega à schematize-web; segurança ofensiva à schematize-pentest; disciplina de teste à schematize-qa.
+description: >-
+  Padrões de engenharia da casa para Ruby: Rails 8, Solid Queue, RSpec. Use ao projetar, gerar, revisar ou refatorar backend, API, job, migration, CI/CD ou deploy em projeto com Gemfile/*.rb/config.ru, ou ao escolher Ruby no rol (fit + ADR). Mantém os pisos de segurança, IAM e archive da base; pentest e QA vão às skills próprias.
 ---
 
 # Padrões de Engenharia da Casa — recorte Ruby
@@ -72,7 +73,7 @@ Mapa de references — leia o que casa com a tarefa:
 |---|---|
 | **Limites de código (arquivo ≤750: ~500 úteis + ~250 comentário; flag >300 úteis), uma classe/módulo por arquivo, doc-comment YARD, `frozen_string_literal`, RuboCop, RBS/Sorbet, MAPA** | `references/padroes-codigo.md` |
 | **Escolha de linguagem (rol sancionado + fit de Ruby, §3)**, arquitetura, camadas, DDD, packwerk, repository pattern isolando ActiveRecord, estrutura de pastas Rails/Sinatra | `references/arquitetura.md` |
-| Eventos/mensageria (Sidekiq/ActiveJob), banco (ActiveRecord/Sequel), migrations reversíveis, cache Redis, APIs, resiliência, outbox | `references/dados-eventos.md` |
+| Eventos/mensageria (Solid Queue/ActiveJob; Sidekiq por ADR), banco (ActiveRecord/Sequel), migrations reversíveis, cache Redis, APIs, resiliência, outbox | `references/dados-eventos.md` |
 | Segurança, auth, JWT, multi-tenancy, LGPD, **segredos/ActiveRecord parametrizado/strong params/SecureRandom/YAML seguro/brakeman** | `references/seguranca.md` |
 | **IAM (identidade+autorização): auth como app Ruby separada (`auth.<domain>`), Devise sozinho não é o IAM, ID≠email, ≥2 fatores (`webauthn`/`rotp`/OTP), ReBAC multi-tenant, sessão longa/logout irreversível, migração de legado** | `references/iam.md` |
 | **Cadeia de suprimentos: `Gemfile.lock`, `bundler-audit`, SBOM, imagem mínima/pinada, `.ruby-version` não-EOL** | `references/cadeia-suprimentos.md` |
@@ -93,7 +94,7 @@ Estes nunca são violados, nem "pra funcionar", nem "pra ir mais rápido". A lis
 - **Segredo nunca no cliente nem no bundle.** Nada de API key, secret de JWT, senha de banco ou token no código, no `Gemfile`, em asset servido ou em `NEXT_PUBLIC_*`/`VITE_*` do front. Segredo só via **Rails credentials** (`credentials.yml.enc` + master key fora do repo) / ENV / secret manager. Detalhe em `references/seguranca.md`.
 - **ActiveRecord/SQL sempre parametrizado.** **VETADO** interpolar string em `where("... #{x}")`, `find_by_sql`, `sanitize_sql` mal usado — use placeholders (`where("email = ?", x)`) ou hash (`where(email: x)`). Concatenar SQL é injeção esperando acontecer.
 - **Strong parameters sempre.** `params.require(...).permit(...)` contra **mass-assignment**; **VETADO** `permit!`/`params.to_unsafe_h` sobre input de usuário.
-- **Auth e autorização server-side.** `tenant_id`/role/`user_id` vêm do token verificado, nunca do `params`/body. Validação no front é UX, não controle. JWT validado por inteiro (assinatura, exp, aud, iss, `alg` em allowlist — **VETADO `alg=none`**). Senha em `bcrypt` cost ≥ 12 ou `argon2` (argon2id) + HIBP. Token/sessão/reset por **`SecureRandom`**, nunca `rand`/`Random`.
+- **Auth e autorização server-side.** `tenant_id`/role/`user_id` vêm do token verificado, nunca do `params`/body. Validação no front é UX, não controle. JWT validado por inteiro (assinatura, exp, aud, iss, `alg` em allowlist — **VETADO `alg=none`**). Senha: argon2id-only para senha nova (bcrypt/PBKDF2 só legado a migrar no próximo login); parâmetros em `schematize-engineering → references/iam.md` §2.1 + HIBP. Token/sessão/reset por **`SecureRandom`**, nunca `rand`/`Random`.
 - **Desserialização segura.** **VETADO** `YAML.load`/`Marshal.load`/`Oj` unsafe sobre dado não-confiável → `YAML.safe_load` com allowlist. Sem `eval`/`send`/`constantize` dirigido por input.
 - **Erro nunca engolido** (`rescue nil`, `rescue => e; end`, `rescue StandardError; end` mudo). Sem calar o problema pra "seguir o fluxo".
 - **Teste nunca silenciado** pra passar CI (`skip`/`pending`/`xit`, comentar `expect`, baixar threshold do SimpleCov). Conserta o código, não o teste. **A dinâmica do Ruby torna o teste load-bearing:** sem compilador que pegue `NoMethodError`/typo/arg errado, o teste + RBS/Sorbet carregam a segurança.

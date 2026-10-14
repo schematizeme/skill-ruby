@@ -73,7 +73,7 @@ Digite `/ruby-help` dentro do Claude Code para ver a lista completa.
 
 ## Skills irmãs
 
-- [skill-go](https://github.com/schematizeme/skill-go) — backend Go (default pragmático).
+- [skill-go](https://github.com/schematizeme/skill-go) — backend Go (par do rol, por fit + ADR).
 - [skill-rust](https://github.com/schematizeme/skill-rust) — backend Rust (quando errar é caro).
 - [skill-node](https://github.com/schematizeme/skill-node) — manutenção de legado Node/TS.
 - [skill-web](https://github.com/schematizeme/skill-web) — frontend / SEO / performance.

@@ -23,12 +23,12 @@
 
 | Cenário | Stack |
 |---|---|
-| Jobs assíncronos, Redis já na casa, retry/dead-set nativos | **Sidekiq** (via ActiveJob ou direto) |
-| Fila Postgres-backed (sem Redis dedicado), transação com o dado | **`good_job`** / **`solid_queue`** |
+| Jobs assíncronos (default, Rails 8), transação com o dado, sem Redis dedicado | **Solid Queue** (ActiveJob) · alternativa `good_job` |
+| Volume/latência/ecossistema que justifique Redis, ou Sidekiq já existente e funcionando | **Sidekiq** (via ActiveJob ou direto) — por ADR |
 | Alto throughput, retenção, replay, streaming | **Kafka** (`rdkafka`/`karafka`) |
 | Routing complexo | RabbitMQ (`bunny`) — justificar pelo custo operacional |
 
-> Sidekiq é o padrão da casa quando há Redis. `good_job`/`solid_queue` quando o outbox e a fila devem viver na **mesma transação Postgres** do dado. Kafka/RabbitMQ exigem justificativa.
+> **Solid Queue é o default** (Rails 8; ver `references/concorrencia.md` C6): outbox e fila vivem na **mesma transação** do dado, sem Redis no caminho. Sidekiq entra por ADR quando o volume/ecossistema justificar (ou já existe e funciona). Kafka/RabbitMQ exigem justificativa.
 
 ## 10. Banco de Dados
 

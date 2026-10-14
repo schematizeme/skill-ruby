@@ -64,7 +64,7 @@ Versões concretas de Ruby/Rails (e janela de EOL) ficam em **`references/stack-
     → Validação completa em toda request; fixe `algorithm:` explicitamente no `JWT.decode` (§14).
 
 11. **Hash de senha fraco** — MD5, SHA1, `Digest`, sem salt, ou plaintext.
-    → `has_secure_password` (bcrypt cost ≥ 12) ou **argon2id** (§14). Nunca rolar hash à mão.
+    → **argon2id** (gem `argon2`); `has_secure_password`/bcrypt só legado a migrar no próximo login (§14). Nunca rolar hash à mão.
 
 12. **`rand`, `Random`, `SecureRandom` ausente pra token, id de sessão, código de reset, nonce** — usar `rand(10**6)` pra OTP, `SecureRandom.random_number` de baixa entropia.
     → **`SecureRandom`** (`.hex`, `.uuid`, `.base58`) com entropia adequada; CSPRNG sempre (§14).

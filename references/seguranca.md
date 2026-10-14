@@ -1,4 +1,4 @@
-# Segurança, Auth, Multi-tenancy, LGPD e Frontend
+# Segurança, Auth, Multi-tenancy, LGPD e Segredos no Cliente
 
 
 > **PONTEIRO, não cópia.** A normativa deste tema é da base: **`schematize-engineering`** →
