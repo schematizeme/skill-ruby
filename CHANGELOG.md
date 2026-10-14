@@ -13,6 +13,8 @@ Saneamento transversal das skills de linguagem (coerência com a base e fatos ve
 - Jobs: Solid Queue é o default (Rails 8) em `dados-eventos.md` e `arquitetura.md`, alinhado a `concorrencia.md`; Sidekiq por ADR quando volume/ecossistema justificar; description não cita mais só Sidekiq.
 - 'Default pragmático (Go)' trocado por ponteiro para `schematize-engineering → references/linguagens.md` (arquitetura.md e README).
 - `seguranca.md`: título não anuncia mais 'Frontend'.
+- **Description** reduzida (~270 chars) para caber no orçamento de listagem (soma das 31 skills ≤ 8500; o Claude Code corta a listagem acima disso).
+- **CI:** actions de terceiros pinadas por SHA completo com comentário `# vX.Y.Z` (mesma major em uso; supply chain), mesmo SHA em todas as skills.
 
 ## [0.4.2] — 2026-09-30
 O piso de orquestração passa a ser **herdado** da base em vez de copiado à mão: uma mudança na engineering não exige mais editar 38 arquivos.
