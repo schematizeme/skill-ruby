@@ -1,7 +1,7 @@
 ---
 name: schematize-ruby
 metadata:
-  version: 0.4.2
+  version: 0.5.0
 description: >-
   Padrões de engenharia para Ruby: Rails 8, Solid Queue, RSpec. Use ao projetar, revisar ou refatorar backend, API,
   job, migration ou CI/CD em projeto com Gemfile/*.rb/config.ru, ou ao escolher Ruby no rol (fit + ADR). Pisos de
@@ -12,7 +12,7 @@ description: >-
 
 Conjunto normativo que rege como software Ruby é projetado, construído, testado e operado aqui. Especializa a base agnóstica (`schematize-engineering`) para o idioma, o build (Bundler/gems), os frameworks (Rails/Sinatra/Roda/Sidekiq/Puma), o modelo de concorrência (GVL/threads/Ractor/async) e o ecossistema Ruby — **sem nunca afrouxar o piso**. Escolher Ruby é decisão de ADR (fit); cumprir o piso não é opcional.
 
-**Versão:** skill `schematize-ruby` v0.4.2. Changelog em `CHANGELOG.md`.
+**Versão:** skill `schematize-ruby` v0.5.0. Changelog em `CHANGELOG.md`.
 
 ## Precedência e herança (leia antes de divergir)
 
