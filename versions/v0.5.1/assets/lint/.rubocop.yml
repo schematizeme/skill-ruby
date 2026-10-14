@@ -1,0 +1,56 @@
+# .rubocop.yml — guard de estilo e complexidade da casa (§6, schematize-ruby).
+# Copie para a raiz do projeto Ruby. Os Metrics/* mapeiam os limites de código:
+# arquivo ≤ 750 linhas (teto duro), método pequeno, uma unidade lógica por arquivo.
+# Rode com `bundle exec rubocop --parallel` (também no CI, ver assets/ci/).
+
+require:
+  - rubocop-performance
+  # - rubocop-rails      # habilite em app Rails
+  # - rubocop-rspec      # habilite se usar RSpec
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3   # pin do .ruby-version (não-EOL — ver references/stack-versoes.md)
+  Exclude:
+    - "db/schema.rb"
+    - "db/migrate/**/*"     # migrations: exceção da §6
+    - "vendor/**/*"
+    - "bin/**/*"
+    - "node_modules/**/*"
+
+# §6 — tamanho de arquivo: teto DURO 750 (~500 úteis + ~250 comentário).
+Metrics/ClassLength:
+  Max: 500                 # código útil; acima → quebrar por coesão / service objects
+Metrics/ModuleLength:
+  Max: 500
+
+# §6 — método pequeno, responsabilidade única.
+Metrics/MethodLength:
+  Max: 15                  # norma da casa; método maior → micro-métodos compostos
+Metrics/AbcSize:
+  Max: 20
+Metrics/CyclomaticComplexity:
+  Max: 15                  # complexidade ciclomática honesta > proxy de linhas
+Metrics/PerceptionComplexity:
+  Enabled: false
+Metrics/BlockNesting:
+  Max: 4                   # aninhamento > 4 níveis → extrair
+
+# frozen_string_literal obrigatório no topo de todo arquivo (§6, piso).
+Style/FrozenStringLiteralComment:
+  Enabled: true
+  EnforcedStyle: always
+
+# Documentação de classe/módulo público alimenta o índice (§6, §39).
+Style/Documentation:
+  Enabled: true
+
+# Erro nunca engolido (§37).
+Lint/SuppressedException:
+  Enabled: true
+Style/RescueStandardError:
+  Enabled: true
+
+# Uma classe/módulo por arquivo (§6).
+Style/ClassAndModuleChildren:
+  Enabled: true
