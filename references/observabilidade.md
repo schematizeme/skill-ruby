@@ -1,19 +1,18 @@
 # Observabilidade, Healthchecks, Performance e FinOps
 
 
-> **PONTEIRO, não cópia.** A normativa deste tema é da base: **`schematize-engineering`** →
-> `references/observabilidade.md`. Leia lá primeiro; aqui fica **só o que muda em Ruby**.
->
-> **Onde este arquivo divergir da base, a BASE MANDA** (`SKILL.md` §"Precedência e herança").
-> Em 2026-08-21 os blocos idênticos à base foram **podados mecanicamente** (`tools/podar-clone.mjs`),
-> e é por isso que a numeração **salta**: o número é o da base, e o item ausente aqui é o que **não
-> muda nesta linguagem** — procure-o lá.
+> **PONTEIRO, não cópia.** O padrão (OpenTelemetry, Collector, sinais correlacionados, SLO, alertas, dashboards
+> como código, stack de referência) é da **`schematize-observability`** (`schematize-observability -> SKILL.md` e
+> `references/`); o piso da base está em `schematize-engineering -> references/observabilidade.md`. Aqui fica
+> **só o que muda em Ruby**: gems (OTel Ruby, `lograge`/`semantic_logger`, `yabeda`), `filter_parameters` do Rails,
+> heap/GC por worker. **Onde divergir, a base e a `schematize-observability` mandam**
+> (`SKILL.md` §"Precedência e herança"); a numeração salta porque o número é o da base.
 
 ## 16. Observabilidade
 
 - **Instrumentação:** **OpenTelemetry Ruby** (`opentelemetry-sdk` + `opentelemetry-exporter-otlp` + `opentelemetry-instrumentation-all`) — traces, métricas e logs correlacionados por `trace_id`; exemplars ligando métrica↔trace. Auto-instrumentação de Rails/Rack, Sidekiq, `pg`/ActiveRecord e Redis liga sozinha.
 
-- **Backends:** Loki (logs), Tempo (traces), Prometheus (scrape/local) + **Mimir** (métricas long-term, HA, multi-tenant); **SHOULD** Pyroscope (profiling contínuo — `pyroscope`/`opentelemetry` profiling).
+- **Backends e stack:** `schematize-observability -> references/stack-referencia.md`. Profiling contínuo: `schematize-observability -> references/amostragem-profiling.md`.
 
 ### 16.1 Logs
 
@@ -37,7 +36,7 @@
 
 ## 17. Healthchecks
 
-- `/ready` — readiness (dependências OK: DB, Redis, Sidekiq — pronto pra tráfego)
+Contrato liveness/readiness: `schematize-observability -> references/healthchecks.md`. Em Rails, `/ready` checa DB, Redis e Sidekiq (pronto pra tráfego); liveness não toca dependência.
 
 ## 30. Performance — Metas Padrão
 
