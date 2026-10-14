@@ -10,6 +10,8 @@
 > **Onde este arquivo divergir da base, a BASE MANDA.** Aqui fica o recorte idiomático: a topologia
 > do serviço, as bibliotecas, e o guard de efeito externo da §3.1 — que é código compilado e
 > testado, não prosa.
+>
+> **Skill dona do IAM:** `schematize-iam` → `references/topologia.md` (broker `auth.<domínio>`), `references/authz-rebac.md`, `references/sessao.md`, `references/fatores.md`. Este arquivo é só o recorte idiomático; não recopie fluxo, fator ou modelo ReBAC aqui.
 
 ## 1. Topologia — auth é uma APLICAÇÃO SEPARADA (serviço Ruby próprio)
 

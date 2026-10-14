@@ -50,6 +50,8 @@
 
 - Análise de query plan (`EXPLAIN ANALYZE`) em endpoints críticos.
 
+- **Operar/migrar Postgres tem dona:** `schematize-postgres` → `references/locks-e-migrations.md` (migration segura, expand-contract, lock_timeout) e `references/pooling.md` (pool/PgBouncer, dimensionamento). Desenho de schema: `schematize-database`.
+
 **Ferramentas sugeridas:** migrations nativas do Rails (`rails db:migrate`) / `sequel` migrations, `strong_migrations` (bloqueia migration perigosa em tabela grande), `bullet`, `pghero`.
 
 ## 11. Cache
@@ -67,6 +69,8 @@
 ## 12. APIs
 
 - **OpenAPI 3.1** em `/docs/openapi.yaml` — fonte da verdade (gerar/validar com `rswag`/`committee`).
+
+- **Contrato de API tem dona:** `schematize-api` → `references/contrato-rest.md` (OpenAPI 3.1 contract-first, erros), `references/idempotencia.md` (`Idempotency-Key`) e `references/versionamento-deprecacao.md` (`Deprecation`/`Sunset`); aqui só o recorte da linguagem.
 
 - Validação de payload na borda: **strong parameters** (`params.require(...).permit(...)`) e/ou `dry-validation`/`dry-schema` (§38). `permit!`/`to_unsafe_h` em input de usuário é VETADO (§37).
 
