@@ -3,9 +3,9 @@ name: schematize-ruby
 metadata:
   version: 0.5.0
 description: >-
-  Padrões de engenharia para Ruby: Rails 8, Solid Queue, RSpec. Use ao projetar, revisar ou refatorar backend, API,
-  job, migration ou CI/CD em projeto com Gemfile/*.rb/config.ru, ou ao escolher Ruby no rol (fit + ADR). Pisos de
-  segurança, IAM e archive da base; pentest e QA em skills próprias.
+  Padrões de engenharia para Ruby: Rails 8, Solid Queue, RSpec. Use ao projetar ou revisar backend, API, job,
+  migration ou CI/CD com Gemfile/*.rb/config.ru, ou ao escolher Ruby no rol (fit + ADR). Pentest e QA: skills
+  próprias.
 ---
 
 # Padrões de Engenharia da Casa — recorte Ruby
